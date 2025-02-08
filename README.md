@@ -1,2 +1,2 @@
-# job-tracker
-An interactive application I wrote for myself to gather data about my ongoing job search
+# Personal Job Application Tracker
+An interactive app I wrote to easily gather and view data about my ongoing job search
