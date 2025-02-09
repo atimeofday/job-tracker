@@ -18,7 +18,8 @@ def ls(sourceTypeOptions,listOption='default'):
     # Read file into Pandas DataFrame
     csvFile = pandas.read_csv('./jobtracker.csv')
     csvFile['Date'] = pandas.to_datetime(csvFile['Date'], format="%m-%d-%y")
-    
+    filteredCSV = pandas.DataFrame()
+
     match listOption:
         
         # Filter CSV line entries by current month
@@ -43,11 +44,11 @@ def ls(sourceTypeOptions,listOption='default'):
         
         # List all available filter options
         case 'options' | 'o' | 'h':
-            print("Available source options:")
-            for key, value in sourceOptions.items():
+            print('Available source options:')
+            for key, value in sourceTypeOptions.sourceOptions.items():
                 print(f"  {key}: {value}")
-            print("\nAvailable type options:")
-            for key, value in typeOptions.items():
+            print('\nAvailable type options:')
+            for key, value in sourceTypeOptions.typeOptions.items():
                 print(f"  {key}: {value}")
             return
 
@@ -56,3 +57,4 @@ def ls(sourceTypeOptions,listOption='default'):
         print(f'No job applications found with the given filter')
     else:
         print(filteredCSV)
+        print(f'Total: {len(filteredCSV)}')
