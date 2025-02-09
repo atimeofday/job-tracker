@@ -16,7 +16,7 @@ def trackerHelp(dispatcher, dynamicArgs, function='default'):
             print('\nUse "help [function]" for more detailed information')
             
         case 'ls':
-            print('Lists job applications filtered by source, type, and/or date.')
+            print('Lists job applications filtered by source, type, and/or date, and their total.')
             
         case 'apply':
             print('Adds a job application to the tracker.')
