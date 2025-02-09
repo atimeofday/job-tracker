@@ -7,6 +7,16 @@ from datetime import datetime
 # Lists job applications filtered by source, type, and/or date.
 def ls(sourceTypeOptions,listOption='default'):
 
+    # Print available source and type options and returns immediately if 'options' is specified
+    if listOption in ('options', 'o', 'h'):
+        print('Available source options:')
+        for key, value in sourceTypeOptions.sourceOptions.items():
+            print(f"  {key}: {value}")
+        print('\nAvailable type options:')
+        for key, value in sourceTypeOptions.typeOptions.items():
+            print(f"  {key}: {value}")
+        return
+
     # Check if listOption is a valid source or type and set listOption to the corresponding dict value
     if listOption in sourceTypeOptions.sourceOptions:
         source = sourceTypeOptions.sourceOptions[listOption]
@@ -20,37 +30,27 @@ def ls(sourceTypeOptions,listOption='default'):
     csvFile['Date'] = pandas.to_datetime(csvFile['Date'], format="%m-%d-%y")
     filteredCSV = pandas.DataFrame()
 
-    match listOption:
-        
-        # Filter CSV line entries by current month
-        case 'default' | 'month' | 'm':
-            filteredCSV = csvFile[(csvFile['Date'].dt.month == datetime.today().month)]
-        
-        # Filter CSV line entries by current week   
-        case 'week' | 'w':
-            filteredCSV = csvFile[(csvFile['Date'].dt.isocalendar().week == datetime.today().isocalendar().week)]
-        
-        # List all CSV line entries
-        case 'all' | 'a':
-            filteredCSV = csvFile
-        
-        # Filter CSV line entries by source
-        case 'Source':
-            filteredCSV = csvFile[(csvFile['Source'] == source)]
-        
-        # Filter CSV line entries by type
-        case 'Type':
-            filteredCSV = csvFile[(csvFile['Type'] == type)]
-        
-        # List all available filter options
-        case 'options' | 'o' | 'h':
-            print('Available source options:')
-            for key, value in sourceTypeOptions.sourceOptions.items():
-                print(f"  {key}: {value}")
-            print('\nAvailable type options:')
-            for key, value in sourceTypeOptions.typeOptions.items():
-                print(f"  {key}: {value}")
-            return
+    # Define filter functions
+    filters = {
+        'month':    lambda df: df[df['Date'].dt.month == datetime.today().month],
+        'week':     lambda df: df[df['Date'].dt.isocalendar().week == datetime.today().isocalendar().week],
+        'day':      lambda df: df[df['Date'].dt.date == datetime.today().date()],
+        'all':      lambda df: df,
+        'Source':   lambda df: df[df['Source'] == source],
+        'Type':     lambda df: df[df['Type'] == type]
+    }
+    
+    # Add aliases
+    filters.update({
+        'default': filters['month'],
+        'm': filters['month'],
+        'w': filters['week'],
+        'd': filters['day'],
+        'a': filters['all']
+    })
+    
+    # Apply the filter
+    filteredCSV = filters.get(listOption, lambda df: pandas.DataFrame())(csvFile)
 
     # Print filtered table of job applications
     if filteredCSV.empty:
