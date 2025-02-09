@@ -5,14 +5,14 @@ from datetime import datetime
 # ----------------------------------------------------------------------------------------------------------------  
 
 # Lists job applications filtered by source, type, and/or date.
-def ls(sourceOptions, typeOptions, listOption='default'):
+def ls(sourceTypeOptions,listOption='default'):
 
     # Check if listOption is a valid source or type and set listOption to the corresponding dict value
-    if listOption in sourceOptions:
-        source = sourceOptions[listOption]
+    if listOption in sourceTypeOptions.sourceOptions:
+        source = sourceTypeOptions.sourceOptions[listOption]
         listOption = 'Source'
-    elif listOption in typeOptions:
-        type = typeOptions[listOption]
+    elif listOption in sourceTypeOptions.typeOptions:
+        type = sourceTypeOptions.typeOptions[listOption]
         listOption = 'Type'
     
     # Read file into Pandas DataFrame

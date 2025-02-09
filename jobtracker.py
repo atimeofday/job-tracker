@@ -3,6 +3,7 @@ import os
 import pandas
 from datetime import datetime
 from inspect import isfunction
+from collections import ChainMap
 
 # ----------------------------------------------------------------------------------------------------------------
 
@@ -11,6 +12,12 @@ from trackerapply import apply
 from trackerhelp import trackerHelp
 
 # ----------------------------------------------------------------------------------------------------------------
+
+# Collects source and type options for passing to other functions 
+class collectedOptions:
+    def __init__(self, sourceOptions, typeOptions):
+        self.sourceOptions = sourceOptions
+        self.typeOptions = typeOptions
 
 # Primary interface/logic loop using a dictionary of functions callable by user input
 def interact():
@@ -38,19 +45,23 @@ def interact():
         'new':      'create',
     }
 
-    applySourceOptions = {
+    sourceOptions = {
         'i':    'Indeed',
+        'g':    'Glassdoor',
         'w':    'Wellfound',
         'n':    'LinkedIn',
         'b':    'BuiltIn',
         'c':    'Company',
         'r':    'Referral',
     }
-    applyTypeOptions = {
+    
+    typeOptions = {
         's':    'Short',
         'l':    'Long'
     }
-
+    
+    optionsList = collectedOptions(sourceOptions, typeOptions)
+    
     # Input variable and main loop
     action = 'init'
     while action != 'end':
@@ -82,6 +93,8 @@ def interact():
             case _: 
                 print('Function not found in dispatcher\n')
                 continue
+        
+        function = dispatcher[function].__name__
 
         # Calls functions with dispatcher and handles special argument cases
         match function:
@@ -89,9 +102,9 @@ def interact():
             case 'help':
                 dispatcher[function](dispatcher, options, option)
             case 'apply':
-                dispatcher[function](applySourceOptions, applyTypeOptions, option, *args)
+                dispatcher[function](optionsList, option, *args)
             case 'ls':
-                dispatcher[function](applySourceOptions, applyTypeOptions, option)
+                dispatcher[function](optionsList, option)
             case _:
                 dispatcher[function](options.get(option, option), *args)
 
