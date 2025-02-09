@@ -99,14 +99,10 @@ def interact():
         # Calls functions with dispatcher and handles special argument cases
         match function:
             # Passes additional meta-programming information to the help function
-            case 'help':
-                dispatcher[function](dispatcher, options, option)
-            case 'apply':
-                dispatcher[function](optionsList, option, *args)
-            case 'ls':
-                dispatcher[function](optionsList, option)
-            case _:
-                dispatcher[function](options.get(option, option), *args)
+            case 'help':    dispatcher[function](dispatcher, options, option)
+            case 'apply':   dispatcher[function](optionsList, option, *args)
+            case 'ls':      dispatcher[function](optionsList, option)
+            case _:         dispatcher[function](options.get(option, option), *args)
 
 # ----------------------------------------------------------------------------------------------------------------
 
