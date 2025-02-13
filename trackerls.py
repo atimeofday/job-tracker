@@ -20,10 +20,10 @@ def ls(sourceTypeOptions,listOption='default'):
     # Check if listOption is a valid source or type and set listOption to the corresponding dict value
     if listOption in sourceTypeOptions.sourceOptions:
         source = sourceTypeOptions.sourceOptions[listOption]
-        listOption = 'Source'
+        listOption = 'source'
     elif listOption in sourceTypeOptions.typeOptions:
         type = sourceTypeOptions.typeOptions[listOption]
-        listOption = 'Type'
+        listOption = 'type'
     
     # Read file into Pandas DataFrame
     csvFile = pandas.read_csv('./jobtracker.csv')
@@ -36,8 +36,8 @@ def ls(sourceTypeOptions,listOption='default'):
         'week':     lambda df: df[df['Date'].dt.isocalendar().week == datetime.today().isocalendar().week],
         'day':      lambda df: df[df['Date'].dt.date == datetime.today().date()],
         'all':      lambda df: df,
-        'Source':   lambda df: df[df['Source'] == source],
-        'Type':     lambda df: df[df['Type'] == type]
+        'source':   lambda df: df[df['Source'] == source],
+        'type':     lambda df: df[df['Type'] == type]
     }
     
     # Add aliases
