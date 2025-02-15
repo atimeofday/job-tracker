@@ -51,6 +51,7 @@ def interact():
         'w':    'Wellfound',
         'n':    'LinkedIn',
         'b':    'BuiltIn',
+        'h':    'Handshake',
         'c':    'Company',
         'r':    'Referral',
     }
