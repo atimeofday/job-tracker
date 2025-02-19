@@ -31,3 +31,6 @@ The tracker currently provides two main commands:
 - `a(ll)`: All applications
 - Source/Type code: Filter by specific source or type
 - `o(ptions)` or `h`: Show available source and type options
+
+## Demo
+[Screencast From 2025-02-12 10-39-12.webm](https://github.com/user-attachments/assets/84dc3427-87c5-4e28-b9a0-733919096987)
