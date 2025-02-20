@@ -57,8 +57,10 @@ def interact():
     }
     
     typeOptions = {
-        's':    'Short',
-        'l':    'Long'
+        's':        'Short',
+        'short':    'Short',
+        'l':        'Long',
+        'long':     'Long',
     }
     
     optionsList = collectedOptions(sourceOptions, typeOptions)
