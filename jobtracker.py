@@ -103,6 +103,9 @@ def interact():
 
 # Interface initialization and isolated top-level for extensibility
 def main():
+    if not os.path.exists('applications.csv'):
+        with open('applications.csv', 'a+') as file: 
+            file.write('Date,Source,Type,Company\n')
     os.system('cls||clear')
     print('Initiating interface')
     interact()
