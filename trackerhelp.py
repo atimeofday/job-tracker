@@ -4,25 +4,42 @@ from inspect import isfunction
 # ----------------------------------------------------------------------------------------------------------------
 
 # Provides user assistance with job tracker functions
-def trackerHelp(dispatcher, dynamicArgs, function='default'):
-    match function:
-        case 'default':
-            print('Available functions: ')
-            for key, value in dispatcher.items():
-                print(f'{key}:\t{value.__name__ if isfunction(value) else value}')
-            print('\nAvailable action synonyms as first or second word:')
-            for key, value in dynamicArgs.items():
+def trackerHelp(modules, aliases, sourceOptions, typeOptions, selection='default'):
+
+    if selection in aliases:
+        selection = aliases[selection]
+
+    match selection:
+
+        case 'default' | 'all' | 'a':
+            print('Available modules: ')
+            for key, value in modules.items():
+                print(f'{key}')
+            print('\nUse "help aliases" for more ways to select modules')
+            print('Use "help [module]" for more detailed information')
+
+        case 'aliases':
+            print('Available aliases: ')
+            for key, value in aliases.items():
                 print(f'{key}:\t{value}')
-            print('\nUse "help [function]" for more detailed information')
             
         case 'ls':
             print('Lists job applications filtered by source, type, and/or date, and their total.')
+            print('Available source options: ')
+            for key, value in sourceOptions.items():
+                print(f'{key}:\t{value}')
+            print('\nAvailable type options: ')
+            for key, value in typeOptions.items():
+                print(f'{key}:\t{value}')
             
         case 'apply':
             print('Adds a job application to the tracker.')
             
         case 'help':
             print('Displays this help message.')
+
+        case 'exit':
+            print('Exits the job tracker.')
             
         case _:
-            print('Invalid function.')
+            print('Invalid selection.')

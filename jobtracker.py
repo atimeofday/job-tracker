@@ -22,27 +22,23 @@ class collectedOptions:
 # Primary interface/logic loop using a dictionary of functions callable by user input
 def interact():
 
-    # Handles synonyms of functions and most function calling
-    dispatcher = {
-        'a':        apply,
-        'app':      apply,
+    modules = {
+        'help':     trackerHelp,
         'apply':    apply,
         'ls':       ls,
-        'list':     ls,
-        'help':     trackerHelp,
-        'end':      exit
     }
 
-    # Handles synonyms or alternative orders of input arguments
-    options = {
-        'delete':   'delete',
-        'remove':   'delete',
-        'clear':    'delete',
-        'del':      'delete', 
-        'create':   'create', 
-        'make':     'create',
-        'add':      'create',
-        'new':      'create',
+    # Handles synonyms of functions and most function calling
+    aliases = {
+        'help':     'help',
+        'h':        'help',
+        'exit':     'exit',
+        'e':        'exit',
+        'apply':    'apply',
+        'app':      'apply',
+        'a':        'apply',
+        'list':     'ls',
+        'ls':       'ls'
     }
 
     sourceOptions = {
@@ -63,49 +59,45 @@ def interact():
         'long':     'Long',
     }
     
-    optionsList = collectedOptions(sourceOptions, typeOptions)
-    
+    optionSets = collectedOptions(sourceOptions, typeOptions)
+    optionsList = sourceOptions | typeOptions
+
+    inputString = 'init'
     # Input variable and main loop
-    action = 'init'
-    while action != 'end':
+    while inputString != 'exit':
+
+        # Initialize default function call parameters
+        alias = 'help'
+        option = 'default'
 
         # Prompts user for input and splits input string into arguments for processing
-        inputString = input('\nInput action: ')
-        action = inputString.split()
-        function = 'help'
-        option = 'default'
+        inputString = input('\nInput: ')
+        inputSet = inputString.split()
         
         # Clears screen to maintain readability and consistent user experience
         os.system('cls||clear')
         print(f'Input: {inputString}\n')
 
         # Assigns variables by permutations of input argument order for grammatically comfortable input
-        match action:
-            case ['end']: break
+        match inputSet:
+            case [alias, option, *args] if alias in aliases: pass
+            case [option, alias, *args] if alias in aliases: pass
+            case [alias, *args] if alias in aliases: pass
             case []: pass
-            case ['help' as function]: pass 
-            case ['help' as function, option] | [option, 'help' as function]: pass
-            case [function, option, *args] if function in dispatcher: pass
-            case [option, function, *args] if function in dispatcher: pass
-            case ['ls' as function]: pass
-            # Calls functions with no arguments if none are given
-            case [function] if function in dispatcher:
-                dispatcher[function]()
+            case _:
+                print('Module not found\n')
                 continue
-            # Provides user feedback if no function-call matches are found for a given input
-            case _: 
-                print('Function not found in dispatcher\n')
-                continue
-        
-        function = dispatcher[function].__name__
 
-        # Calls functions with dispatcher and handles special argument cases
-        match function:
-            # Passes additional meta-programming information to the help function
-            case 'help':    dispatcher[function](dispatcher, options, option)
-            case 'apply':   dispatcher[function](optionsList, option, *args)
-            case 'ls':      dispatcher[function](optionsList, option)
-            case _:         dispatcher[function](options.get(option, option), *args)
+        selection = aliases[alias]
+        if selection == 'exit': break
+
+        module = modules[selection]
+
+        match selection:
+            case 'help':    module(modules, aliases, sourceOptions, typeOptions, option)
+            case 'apply':   module(optionSets, option, *args)
+            case 'ls':      module(optionSets, option)
+            case _:         module()
 
 # ----------------------------------------------------------------------------------------------------------------
 

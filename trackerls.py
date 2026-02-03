@@ -26,7 +26,7 @@ def ls(sourceTypeOptions,listOption='default'):
         listOption = 'type'
     
     # Read file into Pandas DataFrame
-    csvFile = pandas.read_csv('./jobtracker.csv')
+    csvFile = pandas.read_csv('./applications.csv')
     csvFile['Date'] = pandas.to_datetime(csvFile['Date'], format="%m-%d-%y")
     filteredCSV = pandas.DataFrame()
 
