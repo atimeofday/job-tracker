@@ -34,6 +34,12 @@ def trackerHelp(modules, aliases, sourceOptions, typeOptions, selection='default
             
         case 'apply':
             print('Adds a job application to the tracker.')
+            print('Available source options: ')
+            for key, value in sourceOptions.items():
+                print(f'{key}:\t{value}')
+            print('\nAvailable type options: ')
+            for key, value in typeOptions.items():
+                print(f'{key}:\t{value}')
             
         case 'help':
             print('Displays this help message.')
